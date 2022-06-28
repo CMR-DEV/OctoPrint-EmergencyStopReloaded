@@ -1,32 +1,22 @@
-# Filament sensor simplified
+# OctoPrint Emergency Stop Reloaded
 
-This plugin reacts to short lever microswitch output like [this](https://chinadaier.en.made-in-china.com/product/ABVJkvyMAqcT/China-1A-125VAC-on-off-Kw10-Mini-Micro-Mouse-Switch.html)
-If triggered it issues configured command to printer.
+This plugin reacts to a physical short lever microswitch output like [this](https://chinadaier.en.made-in-china.com/product/ABVJkvyMAqcT/China-1A-125VAC-on-off-Kw10-Mini-Micro-Mouse-Switch.html)
+If actuated it issues configured command to printer.
 
 Let's check some features:
-* pop-up notification when printer runs out of filament
-* very handy pop-up when printer requires user input while changing filament
+* pop-up notification and sending of M112 G-CODE (customizable) when the emergency stop button is actuated
 * test button so you know if your sensor really works or not
-* filament check at the start of the print - if no filament present it won't start printing, again pop-up will appear
-* filament check at the end of filament change - just to be sure you won't start printing with no filament
-* navbar icon where you can immediately see if the filament's in
 * info pop-up when plugin hasn't been configured
-* filament runouts can be repeatable
 * user-friendly and easy to configure
 * pin validation so you don't accidentally save wrong pin number
 * detection of used GPIO mode - this makes it compatible with other plugins
-* handles delibrate M600 filament change
-* if your printer doesn't support M600 you have option to use Octoprint pause and the plugin will park the head to X0 Y0
-* runs on OctoPrint 1.3.0 and higher
-
-**NOTE: this plugin won't work if you use OctoPrint only to start printing from SD card**
+* runs on OctoPrint 1.8.1 and higher
 
 ## Setup
 
-Install via the bundled [Plugin Manager](https://docs.octoprint.org/en/master/bundledplugins/pluginmanager.html)
-or manually using this URL:
+Install manually using this URL:
 
-    https://github.com/luckyx182/Filament_sensor_simplified/archive/master.zip
+    https://github.com/CMR-DEV/OctoPrint-EmergencyStopReloaded/archive/master.zip
 
 ## Configuration
 
@@ -35,13 +25,12 @@ Configuration consists of these parameters:
 by the "Broadcom SOC channel", if this is selected by 3rd party, this option will be disabled with note on GUI
 2. **pin number** - pin number based on selected mode
 3. **power input to sensor** - input is connected to **ground or 3.3 V**
-4. **switch type** - switch should be **triggered when opened** (input of the sensor doesn't transfer to its output) or **triggered when closed** (input of the sensor is transferred to its output)
-5. **runout action** - choose whether you want or send **M600 X0 Y0 or other G-code** or use **Octoprint pause**
-5. **g-code** to send to printer on filament runout - default is M600 X0 Y0
+4. **switch type** - button should be **triggered when opened** (input of the sensor doesn't transfer to its output) or **triggered when closed** (input of the sensor is transferred to its output)
+5. **g-code** to send to printer when the button is triggered - default is M112
 
 Default pin is 0 (not configured) and ground (as it is safer, read below).
 
-After configuring it is best to restart Octoprint and dry-run to check if the filament change works correctly to avoid any problems.
+After configuring it is best to restart Octoprint and dry-run to check if the button works correctly in order to avoid any problems.
 
 **WARNING! Never connect the switch input to 5V as it could fry the GPIO section of your Raspberry!**
 
@@ -52,41 +41,3 @@ You might experience the same problem as I experienced - the sensor was randomly
 To solve this connect a shielded wire to your sensor and ground the shielding, ideally on both ends.
 
 If you are unsure about your sensor being triggered, check [OctoPrint logs](https://community.octoprint.org/t/where-can-i-find-octoprints-and-octopis-log-files/299)
-
-## Support me
-
-![Luke's 3D](screenshots/Lukes_3D_logo.png "Luke's 3D")
-
-This plugin was developed in my spare time.
-If you find it useful and like it, you can support me by clicking the button below :)
-
-[![More coffee, more code](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5L758LYSUGHW4&source=url)
-
-Have a good one
-
-Luke
-
-## Screenshots
-
-Plugin settings:
-![plugin_settings](screenshots/settings.png "Plugin settings")
-
-Navbar icons:
-![plugin_settings](screenshots/navbar-icon1.png "Plugin settings")
-![plugin_settings](screenshots/navbar-icon2.png "Plugin settings")
-
-No configuration pop-up:
-![no_config_pop-up](screenshots/no_conf_popup.png "No configuration pop-up")
-
-No filament when starting print pop-up:
-![start_no_filament_popup](screenshots/no_filament.png "Start with no filament pop-up")
-
-Filament runout pop-up:
-![no_filament_popup](screenshots/filament_runout.png "No filament pop-up")
-
-Waiting for user input pop-up:
-![user_input_popup](screenshots/waiting_for_user_input.png "User input required pop-up")
-
-## Maintainers wanted
-
-As I don't have much time for this plugin anymore any help on maintaining the plugin will be greatly appreciated. I will only do basic maintenance.
