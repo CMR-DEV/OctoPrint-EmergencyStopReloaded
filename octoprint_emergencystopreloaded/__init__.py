@@ -476,7 +476,7 @@ class EmergencyStopReloadedPlugin(
                 
             else:
             
-                self._logger.info( "Reading result: " + str( newTrigger ) )        
+                self._logger.info( "Reading result: %s" % curentVal )        
                 return curentVal
 
     # read sensor input value
