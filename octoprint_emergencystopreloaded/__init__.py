@@ -326,6 +326,60 @@ class EmergencyStopReloadedPlugin(
         power_to_save           = self._settings.get_int(["power"])
         trigger_mode_to_save    = self._settings.get_int(["triggered"])
 
+        for key in [
+            "pin",
+            "gpio_mode",
+            "power",
+            "trigger",
+            
+            "bounce_time",
+            "reading_iterations",
+            "reading_delay",
+        ]:
+            if key in data:
+                value = data.get( key )
+                
+                if not value.isdigit():
+                
+                    self._plugin_manager.send_plugin_message(
+                        self._identifier,
+                        {
+                            "type":         "error",
+                            "autoClose":    True,
+                            "msg":          "Emergency stop settings not saved: " + key + " is not an integer"
+                        }
+                    )
+                    
+                    return 
+                
+                intVal = int( value )
+                
+                if key is "reading_iterations" and intVal < 1:
+                
+                    self._plugin_manager.send_plugin_message(
+                        self._identifier,
+                        {
+                            "type":         "error",
+                            "autoClose":    True,
+                            "msg":          "Emergency stop settings not saved: " + key + " must be positive"
+                        }
+                    )
+                    
+                    return 
+                
+                elif key in ( "bounce_time", "reading_delay" ) and intVal < 0:
+                
+                    self._plugin_manager.send_plugin_message(
+                        self._identifier,
+                        {
+                            "type":         "error",
+                            "autoClose":    True,
+                            "msg":          "Emergency stop settings not saved: " + key + " must be non-negative"
+                        }
+                    )
+                    
+                    return 
+            
         if "pin" in data:
             pin_to_save = int( data.get("pin") )
 
