@@ -25,7 +25,7 @@
         <label class="control-label" for="emergencystopreloaded_settings_pinInput">{{ _('Pin number') }}</label>
         <div class="controls">
             <input id="emergencystopreloaded_settings_pinInput" type="number" step="1" min="0" max="40" class="input-mini" data-bind="value: settingsViewModel.settings.plugins.emergencystopreloaded.pin, disable:printing" required>
-            <span class="help-block">Which Raspberry Pi pin is your sensor output attached to? (0 disables the plugin) <a target="_blank" href="https://pinout.xyz/">Pinout help</a></span>
+            <span class="help-block">Which Raspberry Pi pin is your button output attached to? (0 disables the plugin) <a target="_blank" href="https://pinout.xyz/">Pinout help</a></span>
             <div class="alert alert-error hidden" id="emergencystopreloaded_settings_badpin">
                 <i class="fas fa-info icon-info-sign iconRight"></i>
                 {{ _('Warning: The selected pin is not a standard "data" pin.') }}
@@ -34,17 +34,17 @@
     </div>
 
     <div class="control-group">
-        <label class="control-label" for="emergencystopreloaded_settings_powerInput">{{ _('Sensor is connected to') }}</label>
+        <label class="control-label" for="emergencystopreloaded_settings_powerInput">{{ _('Button is connected to') }}</label>
         <div class="controls">
             <select id="emergencystopreloaded_settings_powerInput" data-bind="value: settingsViewModel.settings.plugins.emergencystopreloaded.power, disable:printing" required>
                 <option value=0>{{ _('Ground') }}</option>
                 <option value=1>{{ _('3.3V') }}</option>
             </select>
-            <span class="help-block">Specify how the sensor (switch) is connected. One end of the sensor must be wired to ground or 3.3V.</span>
+            <span class="help-block">Specify how the button is connected. One end of the button must be wired to ground or 3.3V.</span>
 			
 			<div class="alert alert-warn hidden" id="emergencystopreloaded_settings_pullupwarn">
 				<i class="fas fa-info icon-info-sign iconRight"></i>
-				Warning! Pins 3 and 5 (Board mode) or pins 2 and 3 (BCM mode) have a physical pull up resistor. If the sensor is connected to 3.3V this plugin won't work.
+				Warning! Pins 3 and 5 (Board mode) or pins 2 and 3 (BCM mode) have a physical pull up resistor. If the button is connected to 3.3V this plugin won't work.
 			</div>
 			
             <div class="alert alert-error">
@@ -61,7 +61,7 @@
                 <option value=0>{{ _('Triggered when open') }}</option>
                 <option value=1>{{ _('Triggered when closed') }}</option>
             </select>
-            <span class="help-block">Select if the sensor is triggered when the switch is open or closed.</span>
+            <span class="help-block">Select if the emergency stop is triggered when the switch is open or closed.</span>
         </div>
     </div>
 
