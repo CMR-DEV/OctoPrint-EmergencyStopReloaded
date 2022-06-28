@@ -1,15 +1,20 @@
-#filamentsensorsimplified_settings .iconRight{
-	margin-right: -25px;
-	margin-top: 3px;
-	float: right;
+#emergencystopreloaded_settings .iconRight {
+	margin-right:				-25px;
+	margin-top:					3px;
+	float:						right;
 }
 
-#filamentsensorsimplified_settings div.controls div.alert{
-	margin-bottom: 0px;
-	margin-top: 5px;
+#emergencystopreloaded_settings div.controls div.alert {
+	margin-bottom:				0px;
+	margin-top:					5px;
 }
 
-#filamentsensorsimplified_settings .pulsAlert{
-	animation: pulsate 1s ease-out;
-    animation-iteration-count: 1;
+#emergencystopreloaded_settings .pulsAlert {
+	animation:					pulsate 1s ease-out;
+    animation-iteration-count:	1;
+}
+
+#emergencystopreloaded_settings_commandInput {
+	min-height:					30px;
+	resize:						vertical;
 }
