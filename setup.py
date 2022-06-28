@@ -4,30 +4,30 @@
 ### Do not forget to adjust the following variables to your own plugin.
 
 # The plugin's identifier, has to be unique
-plugin_identifier = "filamentsensorsimplified"
+plugin_identifier = "emergencystopreloaded"
 
 # The plugin's python package, should be "octoprint_<plugin identifier>", has to be unique
-plugin_package = "octoprint_filamentsensorsimplified"
+plugin_package = "octoprint_emergencystopreloaded"
 
 # The plugin's human readable name. Can be overwritten within OctoPrint's internal data via __plugin_name__ in the
 # plugin module
-plugin_name = "Filament sensor simplified"
+plugin_name = "Emergency Stop Reloaded"
 
 # The plugin's version. Can be overwritten within OctoPrint's internal data via __plugin_version__ in the plugin module
-plugin_version = "0.3.0"
+plugin_version = "1.0.0"
 
 # The plugin's description. Can be overwritten within OctoPrint's internal data via __plugin_description__ in the plugin
 # module
-plugin_description = """Simple plugin reacting to filament sensor, issuing filament change gcode to printer on filament runout"""
+plugin_description = """A simple plugin that issues a M112 panic gcode to the printer when a physical emergency stop button is actuated"""
 
 # The plugin's author. Can be overwritten within OctoPrint's internal data via __plugin_author__ in the plugin module
-plugin_author = "Lukáš Malatinský"
+plugin_author = "CMR-DEV"
 
 # The plugin's author's mail address.
-plugin_author_email = "luckyx182@gmail.com"
+plugin_author_email = "cmr-dev@kaffeeschluerfer.com"
 
 # The plugin's homepage URL. Can be overwritten within OctoPrint's internal data via __plugin_url__ in the plugin module
-plugin_url = "https://github.com/luckyx182/Filament_sensor_simplified"
+plugin_url = "https://github.com/CMR-DEV/OctoPrint-EmergencyStopReloaded"
 
 # The plugin's license. Can be overwritten within OctoPrint's internal data via __plugin_license__ in the plugin module
 plugin_license = "AGPLv3"
@@ -74,23 +74,25 @@ except:
 	sys.exit(-1)
 
 setup_parameters = octoprint_setuptools.create_plugin_setup_parameters(
-	identifier=plugin_identifier,
-	package=plugin_package,
-	name=plugin_name,
-	version=plugin_version,
-	description=plugin_description,
-	author=plugin_author,
-	mail=plugin_author_email,
-	url=plugin_url,
-	license=plugin_license,
-	requires=plugin_requires,
-	additional_packages=plugin_additional_packages,
-	ignored_packages=plugin_ignored_packages,
-	additional_data=plugin_additional_data
+
+	identifier          = plugin_identifier,
+	package             = plugin_package,
+	name                = plugin_name,
+	version             = plugin_version,
+	description         = plugin_description,
+	author              = plugin_author,
+	mail                = plugin_author_email,
+	url                 = plugin_url,
+	license             = plugin_license,
+	requires            = plugin_requires,
+	additional_packages = plugin_additional_packages,
+	ignored_packages    = plugin_ignored_packages,
+	additional_data     = plugin_additional_data
+    
 )
 
-if len(additional_setup_parameters):
+if len( additional_setup_parameters ):
 	from octoprint.util import dict_merge
-	setup_parameters = dict_merge(setup_parameters, additional_setup_parameters)
+	setup_parameters = dict_merge( setup_parameters, additional_setup_parameters )
 
-setup(**setup_parameters)
+setup( **setup_parameters )
