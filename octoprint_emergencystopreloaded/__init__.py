@@ -381,7 +381,7 @@ class EmergencyStopReloadedPlugin(
                     return 
             
         if "pin" in data:
-            pin_to_save = int( data.get("pin") )
+            pin_to_save             = int( data.get("pin") )
 
         if "gpio_mode" in data:
             gpio_mode_to_save       = int( data.get("gpio_mode") )
@@ -391,7 +391,8 @@ class EmergencyStopReloadedPlugin(
 
         if "trigger" in data:
             trigger_mode_to_save    = int( data.get("triggered") )
-
+        
+        # pin validation:
         if pin_to_save is not None:
             # check if pin is not power/ground pin or out of range but allow the disabled value (0)
             if pin_to_save is not 0:
