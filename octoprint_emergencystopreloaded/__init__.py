@@ -201,12 +201,12 @@ class EmergencyStopReloadedPlugin(
 
         if self.plugin_enabled( pin ):
 
-            self._logger.info( "Enabling emergency stop sensor" )
+            gpio_mode_name = GPIO_MODE(gpio_mode).name if GPIO_MODE.has_name( gpio_mode ) else "???"
+
+            self._logger.info( f"Enabling emergency stop sensor with GPIO mode { gpio_mode } ({ gpio_mode_name })" )
 
             # BOARD
-            if gpio_mode == GPIO_MODE.BCM:
-
-                self._logger.info( "Mode is 10 (BOARD)" )
+            if gpio_mode == GPIO_MODE.BOARD:
 
                 # if mode set by 3rd party don't set it again
                 if not self.gpio_mode_disabled:
@@ -225,8 +225,6 @@ class EmergencyStopReloadedPlugin(
 
             # BCM
             elif gpio_mode == GPIO_MODE.BCM:
-
-                self._logger.info( "Mode is 11 (BCM)" )
 
                 # BCM range 1-27
                 if pin > 27:
