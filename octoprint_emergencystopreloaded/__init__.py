@@ -7,11 +7,17 @@ from octoprint.events import Events
 from time import sleep
 import RPi.GPIO as GPIO
 import flask
-from enum import IntEnum
+from enum import IntEnum, unique
 
+@unique
 class GPIO_MODE( IntEnum ):
+    UNSET   = -1
     BOARD   = 10
     BCM     = 11
+
+    @classmethod
+    def has_name( cls, name ):
+        return name in cls._value2member_map_
 
 class EmergencyStopReloadedPlugin(
     plugin.StartupPlugin,
