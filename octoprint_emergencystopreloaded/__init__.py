@@ -1,7 +1,7 @@
 # coding=utf-8
 from __future__ import absolute_import
 
-import octoprint.plugin
+import octoprint.plugin as plugin
 import re
 from octoprint.events import Events
 from time import sleep
@@ -14,13 +14,13 @@ class GPIO_MODE( IntEnum ):
     BCM     = 11
 
 class EmergencyStopReloadedPlugin(
-    octoprint.plugin.StartupPlugin,
-    octoprint.plugin.EventHandlerPlugin,
-    octoprint.plugin.TemplatePlugin,
-    octoprint.plugin.SettingsPlugin,
-    octoprint.plugin.SimpleApiPlugin,
-    octoprint.plugin.BlueprintPlugin,
-    octoprint.plugin.AssetPlugin):
+    plugin.StartupPlugin,
+    plugin.EventHandlerPlugin,
+    plugin.TemplatePlugin,
+    plugin.SettingsPlugin,
+    plugin.SimpleApiPlugin,
+    plugin.BlueprintPlugin,
+    plugin.AssetPlugin):
 
     # default gcode
     default_gcode       = "M112"
@@ -99,7 +99,7 @@ class EmergencyStopReloadedPlugin(
             "reading_delay":        100,
         }
 
-    @octoprint.plugin.BlueprintPlugin.route( "/state", methods=[ "GET" ] )
+    @plugin.BlueprintPlugin.route( "/state", methods=[ "GET" ] )
     def on_api_get_state( self ):
         self._logger.debug("getting state info")
 
@@ -457,7 +457,7 @@ class EmergencyStopReloadedPlugin(
                     False
                 )
 
-        octoprint.plugin.SettingsPlugin.on_settings_save( self, data )
+        plugin.SettingsPlugin.on_settings_save( self, data )
 
     def read_sensor_multiple( self, pin, power, trigger_mode ):
 
@@ -613,5 +613,5 @@ def __plugin_load__():
 
     global __plugin_hooks__
     __plugin_hooks__ = {
-        "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
+        "plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
     }
