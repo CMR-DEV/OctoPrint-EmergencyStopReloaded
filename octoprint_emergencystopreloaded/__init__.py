@@ -325,8 +325,9 @@ class EmergencyStopReloadedPlugin(
 
         self.initialized = True
 
-        self._logger.info( "Reading sensor due to startup" )
-        self.sensor_callback( None ) # inital read
+        if self.plugin_enabled( self.setting_pin ):
+            self._logger.info( "Reading sensor due to startup" )
+            self.sensor_callback( None ) # inital read
 
     def on_settings_save( self, data ):
         # Retrieve any settings not changed in order to validate that the combination of new and old settings end up in a bad combination
