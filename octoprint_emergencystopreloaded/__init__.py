@@ -130,6 +130,8 @@ class EmergencyStopReloadedPlugin(
             selected_mode           = int( data.get("mode") )
             selected_switch_type    = int( data.get("triggered") )
 
+            self._logger.info( f"Testing sensor: Power: {selected_power} Pin: {selected_pin} Mode: {selected_mode} SwitchType: {selected_switch_type}" )
+
             if selected_pin is 0:
                 return "", 556
 
@@ -145,7 +147,7 @@ class EmergencyStopReloadedPlugin(
             )
 
             # take measurement:
-            triggered = self.read_sensor_multiple(
+            test_value = self.read_sensor_multiple(
                 selected_pin,
                 selected_power,
                 selected_switch_type
@@ -159,9 +161,9 @@ class EmergencyStopReloadedPlugin(
                 self.setting_triggered
             )
 
-            return flask.jsonify( triggered=triggered )
             self.testing = False
 
+            return flask.jsonify( triggered=test_value )
 
         except ValueError as e:
             self._logger.error( str(e) )
