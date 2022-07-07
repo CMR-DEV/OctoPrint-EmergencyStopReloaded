@@ -34,10 +34,13 @@ class EmergencyStopReloadedPlugin(
     # gpio mode set by 3rd party
     gpio_mode_disabled  = False
 
-    # printing flag
     # gpio mode set by this plugin
     gpio_mode_set = False
 
+    # whether or not there is a sensor test running currently
+    testing            = False
+
+    # whether or not the printer is currently printing
     printing            = False
 
     # whether or not the gcode has already been sent
@@ -130,6 +133,8 @@ class EmergencyStopReloadedPlugin(
             if selected_pin is 0:
                 return "", 556
 
+            self.testing = True
+
             # init gpios with the test values:
             self.init_gpio(
                 selected_mode,
@@ -155,6 +160,8 @@ class EmergencyStopReloadedPlugin(
             )
 
             return flask.jsonify( triggered=triggered )
+            self.testing = False
+
 
         except ValueError as e:
             self._logger.error( str(e) )
@@ -177,6 +184,9 @@ class EmergencyStopReloadedPlugin(
         )
 
     def sensor_callback( self, _ ):
+
+        if self.testing:
+            return
 
         self._logger.info( "Sensor callback called" )
 
