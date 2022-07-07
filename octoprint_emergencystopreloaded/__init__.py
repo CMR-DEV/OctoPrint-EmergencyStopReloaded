@@ -148,8 +148,7 @@ class EmergencyStopReloadedPlugin(
                 self.setting_gpio_mode,
                 self.setting_pin,
                 self.setting_power,
-                self.setting_triggered,
-                True
+                self.setting_triggered
             )
 
             return flask.jsonify( triggered=triggered )
@@ -186,7 +185,7 @@ class EmergencyStopReloadedPlugin(
         else:
             self.gcode_sent = False
 
-    def init_gpio( self, gpio_mode, pin, power, trigger_mode, test ):
+    def init_gpio( self, gpio_mode, pin, power, trigger_mode, test = False ):
         self._logger.info( "Initializing GPIO" )
 
         preset_gpio_mode = GPIO.getmode()
@@ -317,8 +316,7 @@ class EmergencyStopReloadedPlugin(
             self.setting_gpio_mode,
             self.setting_pin,
             self.setting_power,
-            self.setting_triggered,
-            False
+            self.setting_triggered
         )
 
         self.initialized = True
@@ -455,8 +453,7 @@ class EmergencyStopReloadedPlugin(
                     gpio_mode_to_save,
                     pin_to_save,
                     power_to_save,
-                    trigger_mode_to_save,
-                    False
+                    trigger_mode_to_save
                 )
 
         plugin.SettingsPlugin.on_settings_save( self, data )
