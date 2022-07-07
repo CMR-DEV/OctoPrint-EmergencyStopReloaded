@@ -35,6 +35,9 @@ class EmergencyStopReloadedPlugin(
     gpio_mode_disabled  = False
 
     # printing flag
+    # gpio mode set by this plugin
+    gpio_mode_set = False
+
     printing            = False
 
     # whether or not the gcode has already been sent
@@ -211,8 +214,8 @@ class EmergencyStopReloadedPlugin(
                 if not self.gpio_mode_disabled:
                     self._logger.info( "Setting Board mode" )
                     GPIO.cleanup()
-
                     GPIO.setmode( GPIO.BOARD )
+                    self.gpio_mode_set = True
 
                 # first check pins not in use already
                 usage = GPIO.gpio_function( pin )
@@ -233,8 +236,8 @@ class EmergencyStopReloadedPlugin(
                 if not self.gpio_mode_disabled:
                     self._logger.debug( "Setting BCM mode" )
                     GPIO.cleanup()
-
                     GPIO.setmode( GPIO.BCM )
+                    self.gpio_mode_set = True
 
             # attach event listener ( = self.sensor_callback ) when method is not called for testing:
             if not test:
