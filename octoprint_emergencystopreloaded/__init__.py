@@ -409,7 +409,7 @@ class EmergencyStopReloadedPlugin(
             if pin_to_save is not 0:
                 try:
                     # BOARD
-                    if gpio_mode_to_save == GPIO_MODE.BCM:
+                    if gpio_mode_to_save == GPIO_MODE.BOARD:
                         # before saving check if pin not used by others
                         usage = GPIO.gpio_function( pin_to_save )
                         self._logger.debug( f"usage on pin {pin_to_save} is {usage}" )
