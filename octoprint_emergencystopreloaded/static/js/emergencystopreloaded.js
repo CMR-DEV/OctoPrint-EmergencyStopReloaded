@@ -12,11 +12,6 @@ $( function() {
 		self.printing					= ko.observable( false );
 		
 		self.gpio_mode_disabled			= ko.observable( false );
-		self.gpio_mode_disabled_by_3rd	= ko.computed( function() {
-			
-			return this.gpio_mode_disabled();
-			
-		}, this );
 		
 		self.onDataUpdaterPluginMessage = function( plugin, data ) {
 			
