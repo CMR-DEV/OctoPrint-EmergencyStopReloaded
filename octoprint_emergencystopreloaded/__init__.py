@@ -203,21 +203,25 @@ class EmergencyStopReloadedPlugin(
     def init_gpio( self, gpio_mode, pin, power, trigger_mode, test = False ):
         self._logger.info( "Initializing GPIO" )
 
-        preset_gpio_mode = GPIO.getmode()
+        preset_gpio_mode    = GPIO.getmode()
+        locked_str          = ""
 
-        if preset_gpio_mode is not None:
-            self.gpio_mode_disabled = True
-            gpio_mode               = preset_gpio_mode
-            self._settings.set( [ "gpio_mode" ], preset_gpio_mode )
+        if not test and not self.gpio_mode_set:
 
-        else:
-            self._logger.info( "Preset mode is %s" % preset_gpio_mode )
+            if preset_gpio_mode is not None:
+
+                gpio_mode               = preset_gpio_mode
+                locked_str              = " LOCKED"
+                self.gpio_mode_disabled = True
+                self._settings.set( [ "gpio_mode" ], preset_gpio_mode )
+
+            self._logger.debug( f"Preset mode is {preset_gpio_mode}" )
 
         if self.plugin_enabled( pin ):
 
             gpio_mode_name = GPIO_MODE(gpio_mode).name if GPIO_MODE.has_name( gpio_mode ) else "???"
 
-            self._logger.info( f"Enabling emergency stop sensor with GPIO mode { gpio_mode } ({ gpio_mode_name })" )
+            self._logger.info( f"Enabling emergency stop sensor with GPIO mode {gpio_mode} ({gpio_mode_name}{locked_str})" )
 
             # BOARD
             if gpio_mode == GPIO_MODE.BOARD:
