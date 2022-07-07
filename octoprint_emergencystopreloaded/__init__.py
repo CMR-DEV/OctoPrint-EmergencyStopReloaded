@@ -161,7 +161,7 @@ class EmergencyStopReloadedPlugin(
 
     def send_gcode( self, msg ):
 
-        self._logger.info("Sending GCODE: %s" % self.setting_gcode )
+        self._logger.info( f"Sending GCODE: {self.setting_gcode}" )
         self._printer.commands( self.setting_gcode )
         self.gcode_sent = True
 
@@ -217,7 +217,7 @@ class EmergencyStopReloadedPlugin(
 
                 # first check pins not in use already
                 usage = GPIO.gpio_function( pin )
-                self._logger.debug( "Usage on pin %s is %s" % ( pin, usage ) )
+                self._logger.debug( f"Usage on pin {pin} is {usage}" )
                 # 1 = input
                 if usage is not 1:
                     # 555 is not http specific so I chose it
@@ -357,7 +357,7 @@ class EmergencyStopReloadedPlugin(
                         {
                             "type":         "error",
                             "autoClose":    True,
-                            "msg":          "Emergency stop settings not saved: " + key + " is not an integer"
+                            "msg":          f"Emergency stop settings not saved: {key} is not an integer"
                         }
                     )
 
@@ -372,7 +372,7 @@ class EmergencyStopReloadedPlugin(
                         {
                             "type":         "error",
                             "autoClose":    True,
-                            "msg":          "Emergency stop settings not saved: " + key + " must be positive"
+                            "msg":          f"Emergency stop settings not saved: {key} must be positive"
                         }
                     )
 
@@ -385,7 +385,7 @@ class EmergencyStopReloadedPlugin(
                         {
                             "type":         "error",
                             "autoClose":    True,
-                            "msg":          "Emergency stop settings not saved: " + key + " must be non-negative"
+                            "msg":          f"Emergency stop settings not saved: {key} must be non-negative"
                         }
                     )
 
@@ -412,11 +412,10 @@ class EmergencyStopReloadedPlugin(
                     if gpio_mode_to_save == GPIO_MODE.BCM:
                         # before saving check if pin not used by others
                         usage = GPIO.gpio_function( pin_to_save )
-                        self._logger.debug("usage on pin %s is %s" % ( pin_to_save, usage ))
+                        self._logger.debug( f"usage on pin {pin_to_save} is {usage}" )
 
                         if usage is not 1:
-                            self._logger.info(
-                                "You are trying to save pin %s which is already used by others" % pin_to_save )
+                            self._logger.info( f"You are trying to save pin {pin_to_save} which is already used by others" )
                             self._plugin_manager.send_plugin_message(
                                 self._identifier,
                                 {
@@ -430,8 +429,7 @@ class EmergencyStopReloadedPlugin(
                     elif gpio_mode_to_save == GPIO_MODE.BCM:
 
                         if pin_to_save > 27:
-                            self._logger.info(
-                                "You are trying to save pin %s which is out of range" % pin_to_save)
+                            self._logger.info( f"You are trying to save pin {pin_to_save} which is out of range" )
                             self._plugin_manager.send_plugin_message(
                                 self._identifier, {
                                     "type":         "error",
@@ -442,8 +440,7 @@ class EmergencyStopReloadedPlugin(
                             return
 
                 except ValueError:
-                    self._logger.info(
-                        "You are trying to save pin %s which is ground/power pin or out of range" % pin_to_save)
+                    self._logger.info( f"You are trying to save pin {pin_to_save} which is ground/power pin or out of range" )
                     self._plugin_manager.send_plugin_message(
                         self._identifier, {
                             "type":         "error",
@@ -466,7 +463,9 @@ class EmergencyStopReloadedPlugin(
 
     def read_sensor_multiple( self, pin, power, trigger_mode ):
 
-        self._logger.info( "Reading sensor values %s times from pin %s" % ( self.setting_reading_iterations, pin ) )
+        gpio_mode_name = " " + GPIO_MODE( self.setting_gpio_mode ).name if GPIO_MODE.has_name( self.setting_gpio_mode ) else ""
+
+        self._logger.info( f"Reading sensor values {self.setting_reading_iterations} times from{gpio_mode_name} pin {pin}" )
 
         prevVal = None
         i       = 0
@@ -488,7 +487,7 @@ class EmergencyStopReloadedPlugin(
 
             else:
 
-                self._logger.info( "Reading result: %s" % curentVal )
+                self._logger.info( f"Reading result: {curentVal}" )
                 return curentVal
 
     # read sensor input value
@@ -524,10 +523,10 @@ class EmergencyStopReloadedPlugin(
 
                 if self.initialized and self.plugin_enabled( self.setting_pin ):
 
-                    self._logger.debug("Reading sensor due to event: " + event)
+                    self._logger.debug( "Reading sensor due to event: " + event )
 
                     if self.read_sensor_multiple( self.setting_pin, self.setting_power, self.setting_triggered ):
-                        self.send_gcode("Emergency stop is still active! Please reset!")
+                        self.send_gcode( "Emergency stop is still active! Please reset!" )
 
         elif event is Events.CLIENT_OPENED:
 
@@ -553,7 +552,7 @@ class EmergencyStopReloadedPlugin(
             Events.E_STOP
         ):
 
-            self._logger.debug("Resetting due to event: " + event)
+            self._logger.debug( "Resetting due to event: " + event )
             self.gcode_sent = False
             self.printing   = False
 
