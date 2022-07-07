@@ -28,9 +28,6 @@ class EmergencyStopReloadedPlugin(
     plugin.BlueprintPlugin,
     plugin.AssetPlugin):
 
-    # default gcode
-    default_gcode       = "M112"
-
     # gpio mode set by 3rd party
     gpio_mode_disabled  = False
 
@@ -103,7 +100,7 @@ class EmergencyStopReloadedPlugin(
             "gpio_mode":            GPIO_MODE.BOARD.value,
             "pin":                  0,
             "power":                0,
-            "g_code":               self.default_gcode,
+            "g_code":               "M112",
             "triggered ":           0,
 
             "bounce_time":          250,
