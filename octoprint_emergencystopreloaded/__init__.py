@@ -429,7 +429,7 @@ class EmergencyStopReloadedPlugin(
 
                     return
 
-                elif key in ( "bounce_time", "reading_delay" ) and intVal < 0:
+                elif key in ( "bounce_time", "reading_delay" ) and value < 0:
 
                     self._plugin_manager.send_plugin_message(
                         self._identifier,
