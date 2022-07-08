@@ -10,10 +10,20 @@ import flask
 from enum import IntEnum, unique
 
 @unique
+class GPIO_WIRING( IntEnum ):
+    GND         = 0
+    VOLTAGE     = 1
+    
+@unique
+class TRIGGER_TYPE( IntEnum ):
+    ON_CLOSE    = 0
+    ON_OPEN     = 1
+
+@unique
 class GPIO_MODE( IntEnum ):
-    UNSET   = -1
-    BOARD   = 10
-    BCM     = 11
+    UNSET       = -1
+    BOARD       = 10
+    BCM         = 11
 
     @classmethod
     def has_value( cls, name ):
@@ -281,13 +291,13 @@ class EmergencyStopReloadedPlugin(
             # attach event listener ( = self.sensor_callback ) when method is not called for testing:
             if not test:
                 try:
-                    # 0 = sensor is grounded, react to rising edge pulled up by pull up resistor
-                    if power is 0:
+                    
+                    if power == GPIO_WIRING.GND:
 
                         self.pull_resistor( pin, power )
 
                         # triggered when open
-                        if trigger_mode is 0:
+                        if trigger_mode == TRIGGER_TYPE.ON_OPEN:
                             self._logger.debug( "Reacting to rising edge" )
                             GPIO.add_event_detect(
 
@@ -316,7 +326,7 @@ class EmergencyStopReloadedPlugin(
                         self.pull_resistor( pin, power )
 
                         # triggered when open
-                        if trigger_mode is 0:
+                        if trigger_mode == TRIGGER_TYPE.ON_OPEN:
                             self._logger.debug( "Reacting to falling edge" )
                             GPIO.add_event_detect(
 
@@ -341,11 +351,11 @@ class EmergencyStopReloadedPlugin(
 
     # pulls resistor up or down based on the parameters
     def pull_resistor( self, pin, power ):
-        if power is 0:
+        if power == GPIO_WIRING.GND:
             # self._logger.debug("Pulling up resistor")
             GPIO.setup( pin, GPIO.IN, pull_up_down=GPIO.PUD_UP )
 
-        elif power is 1:
+        elif power == GPIO_WIRING.VOLTAGE:
             # self._logger.debug("Pulling down resistor")
             GPIO.setup( pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN )
 
