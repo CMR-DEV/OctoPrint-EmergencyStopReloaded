@@ -39,6 +39,8 @@ class EmergencyStopReloadedPlugin(
     # whether or not gpio mode has been set by this plugin
     gpio_mode_set       = False
 
+    # whether or not the settings dialog is shown currently
+    is_in_settings      = False
 
     # whether or not there is a sensor test running currently
     testing             = False
@@ -128,16 +130,23 @@ class EmergencyStopReloadedPlugin(
     @plugin.BlueprintPlugin.route( "/state", methods=[ "GET" ] )
     def on_api_get_state( self ):
         self._logger.debug("getting state info")
-
+        
+        self.is_in_settings = True
         return flask.jsonify( printing=self.printing, gpio_mode_disabled=self.gpio_mode_disabled )
 
     # simpleApiPlugin
     def get_api_commands( self ):
-        return { "testSensor": [ "pin", "power" ] }
+        return { "testSensor": [ "pin", "power" ], "exitSettings": [] }
 
     # test pin value, power pin or if its used by someone else
     def on_api_command( self, command, data ):
-
+        
+        if command == "exitSettings":
+            self.is_in_settings = False
+            self._logger.info( "Reading sensor due to settings exit" )
+            self.sensor_callback()
+            return "OK", 200
+        
         try:
             selected_power          = int( data.get("power") )
             selected_pin            = int( data.get("pin") )
@@ -201,7 +210,7 @@ class EmergencyStopReloadedPlugin(
 
     def sensor_callback( self, _ ):
 
-        if self.testing:
+        if not self.printing and self.testing or self.is_in_settings:
             return
 
         self._logger.info( "Sensor callback called" )
