@@ -130,7 +130,7 @@ class EmergencyStopReloadedPlugin(
             "pin":                  0,
             "power":                GPIO_WIRING.GND.value,
             "g_code":               "M112",
-            "triggered ":           TRIGGER_TYPE.ON_CLOSE.value,
+            "triggered":           TRIGGER_TYPE.ON_CLOSE.value,
 
             "bounce_time":          250,
             "reading_iterations":   4,
