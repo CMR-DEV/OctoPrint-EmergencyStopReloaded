@@ -26,8 +26,8 @@ class GPIO_MODE( IntEnum ):
     BCM         = 11
 
     @classmethod
-    def has_value( cls, name ):
-        return name in cls._value2member_map_
+    def has_value( cls, value: int ) -> bool:
+        return value in cls._value2member_map_
 
 class EmergencyStopReloadedPlugin(
     plugin.StartupPlugin,
@@ -107,7 +107,7 @@ class EmergencyStopReloadedPlugin(
 
 ################################################################################
 
-    # FUNCTION OVERLOADING
+    # FUNCTION OVERLOADING / PLUGIN HOOKS
 
     # AssetPlugin hook
     def get_assets( self ):
@@ -145,7 +145,7 @@ class EmergencyStopReloadedPlugin(
         return flask.jsonify( printing=self.printing, gpio_mode_disabled=self.gpio_mode_disabled )
 
     # simpleApiPlugin
-    def get_api_commands( self ):
+    def get_api_commands( self ) -> dict:
         return { "testSensor": [ "pin", "power" ], "exitSettings": [] }
 
     # test pin value, power pin or if its used by someone else
@@ -203,7 +203,7 @@ class EmergencyStopReloadedPlugin(
             # ValueError occurs when reading from power, ground or out of range pins
             return "", 556
 
-    def send_gcode( self, msg ):
+    def send_gcode( self, msg: str ):
 
         self._logger.info( f"Sending GCODE: {self.setting_gcode}" )
         self._printer.commands( self.setting_gcode )
@@ -218,7 +218,7 @@ class EmergencyStopReloadedPlugin(
             }
         )
 
-    def sensor_callback( self, _ ):
+    def sensor_callback( self, _ = None ):
 
         if not self.printing and self.testing or self.is_in_settings:
             return
@@ -233,7 +233,7 @@ class EmergencyStopReloadedPlugin(
         else:
             self.gcode_sent = False
 
-    def init_gpio( self, gpio_mode, pin, power, trigger_mode, test = False ):
+    def init_gpio( self, gpio_mode: int, pin: int, power: int, trigger_mode: int, test: bool = False ):
         self._logger.info( "Initializing GPIO" )
 
         preset_gpio_mode    = GPIO.getmode()
@@ -350,7 +350,7 @@ class EmergencyStopReloadedPlugin(
             self._logger.info( "Sensor disabled" )
 
     # pulls resistor up or down based on the parameters
-    def pull_resistor( self, pin, power ):
+    def pull_resistor( self, pin: int, power: int ):
         if power == GPIO_WIRING.GND:
             # self._logger.debug("Pulling up resistor")
             GPIO.setup( pin, GPIO.IN, pull_up_down=GPIO.PUD_UP )
@@ -375,9 +375,9 @@ class EmergencyStopReloadedPlugin(
 
         if self.plugin_enabled( self.setting_pin ):
             self._logger.info( "Reading sensor due to startup" )
-            self.sensor_callback( None ) # inital read
+            self.sensor_callback() # inital read
 
-    def on_settings_save( self, data ):
+    def on_settings_save( self, data: dict ) -> dict:
         # Retrieve any settings not changed in order to validate that the combination of new and old settings end up in a bad combination
 
         self._logger.info( "Saving settings for Emergency Stop Reloaded" )
@@ -508,9 +508,9 @@ class EmergencyStopReloadedPlugin(
                     trigger_mode_to_save
                 )
 
-        plugin.SettingsPlugin.on_settings_save( self, data )
+        return plugin.SettingsPlugin.on_settings_save( self, data )
 
-    def read_sensor_multiple( self, pin, power, trigger_mode ):
+    def read_sensor_multiple( self, pin, power, trigger_mode ) -> int:
 
         gpio_mode_name = " " + GPIO_MODE( self.setting_gpio_mode ).name if GPIO_MODE.has_value( self.setting_gpio_mode ) else ""
 
@@ -540,7 +540,7 @@ class EmergencyStopReloadedPlugin(
                 return curentVal
 
     # read sensor input value
-    def read_sensor( self, pin, power, trigger_mode ):
+    def read_sensor( self, pin: int, power: int, trigger_mode: int ) -> int:
 
         # self._logger.debug("Reading pin %s " % pin)
 
@@ -549,10 +549,10 @@ class EmergencyStopReloadedPlugin(
         return ( GPIO.input( pin ) + power + trigger_mode ) % 2 is 0
 
     # plugin disabled if pin set to 0
-    def plugin_enabled( self, pin ):
+    def plugin_enabled( self, pin: int ) -> bool:
         return pin >= 0
 
-    def on_event( self, event, payload ):
+    def on_event( self, event, *argv ):
 
         if event in (
             Events.HOME,
