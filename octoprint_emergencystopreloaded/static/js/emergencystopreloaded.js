@@ -228,7 +228,7 @@ $( function() {
 				url:      "plugin/emergencystopreloaded/state",
 				success:  function( result ) {
 					
-					self.gpio_mode_disabled( result.gpio_mode_disabled );
+					self.gpio_mode_disabled( result.gpio_mode_locked );
 					self.printing( result.printing );
 					
 				},

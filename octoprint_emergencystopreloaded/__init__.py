@@ -44,7 +44,7 @@ class EmergencyStopReloadedPlugin(
     # FLAGS
 
     # whether or not gpio mode has been set by 3rd party
-    gpio_mode_disabled  = False
+    gpio_mode_locked  = False
 
     # whether or not gpio mode has been set by this plugin
     gpio_mode_set       = False
@@ -143,7 +143,7 @@ class EmergencyStopReloadedPlugin(
         
         self.is_in_settings = True
         self.gcode_sent     = False
-        return flask.jsonify( printing=self.printing, gpio_mode_disabled=self.gpio_mode_disabled )
+        return flask.jsonify( printing=self.printing, gpio_mode_locked=self.gpio_mode_locked )
 
     # simpleApiPlugin
     def get_api_commands( self ) -> dict:
@@ -250,7 +250,7 @@ class EmergencyStopReloadedPlugin(
 
                 gpio_mode               = preset_gpio_mode
                 locked_str              = " LOCKED"
-                self.gpio_mode_disabled = True
+                self.gpio_mode_locked = True
                 self._settings.set( [ "gpio_mode" ], preset_gpio_mode )
 
             self._logger.debug( f"Preset mode is {preset_gpio_mode}" )
@@ -265,7 +265,7 @@ class EmergencyStopReloadedPlugin(
             if gpio_mode == GPIO_MODE.BOARD:
 
                 # if mode set by 3rd party don't set it again
-                if not self.gpio_mode_disabled:
+                if not self.gpio_mode_locked:
                     self._logger.info( "Setting Board mode" )
                     GPIO.cleanup()
                     GPIO.setmode( GPIO.BOARD )
@@ -287,7 +287,7 @@ class EmergencyStopReloadedPlugin(
                     return "", 556
 
                 # if mode set by 3rd party don't set it again
-                if not self.gpio_mode_disabled:
+                if not self.gpio_mode_locked:
                     self._logger.debug( "Setting BCM mode" )
                     GPIO.cleanup()
                     GPIO.setmode( GPIO.BCM )
