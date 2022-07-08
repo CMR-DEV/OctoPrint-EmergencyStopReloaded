@@ -515,7 +515,7 @@ class EmergencyStopReloadedPlugin(
 
     # plugin disabled if pin set to 0
     def plugin_enabled( self, pin: int ) -> bool:
-        return pin >= 0
+        return pin > 0
 
     def on_event( self, event, *argv ):
 
