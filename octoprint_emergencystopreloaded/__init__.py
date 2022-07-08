@@ -16,7 +16,7 @@ class GPIO_MODE( IntEnum ):
     BCM     = 11
 
     @classmethod
-    def has_name( cls, name ):
+    def has_value( cls, name ):
         return name in cls._value2member_map_
 
 class EmergencyStopReloadedPlugin(
@@ -242,7 +242,7 @@ class EmergencyStopReloadedPlugin(
 
         if self.plugin_enabled( pin ):
 
-            gpio_mode_name = GPIO_MODE(gpio_mode).name if GPIO_MODE.has_name( gpio_mode ) else "???"
+            gpio_mode_name = GPIO_MODE(gpio_mode).name if GPIO_MODE.has_value( gpio_mode ) else "???"
 
             self._logger.info( f"Enabling emergency stop sensor with GPIO mode {gpio_mode} ({gpio_mode_name}{locked_str})" )
 
@@ -502,7 +502,7 @@ class EmergencyStopReloadedPlugin(
 
     def read_sensor_multiple( self, pin, power, trigger_mode ):
 
-        gpio_mode_name = " " + GPIO_MODE( self.setting_gpio_mode ).name if GPIO_MODE.has_name( self.setting_gpio_mode ) else ""
+        gpio_mode_name = " " + GPIO_MODE( self.setting_gpio_mode ).name if GPIO_MODE.has_value( self.setting_gpio_mode ) else ""
 
         self._logger.info( f"Reading sensor values {self.setting_reading_iterations} times from{gpio_mode_name} pin {pin}" )
 
