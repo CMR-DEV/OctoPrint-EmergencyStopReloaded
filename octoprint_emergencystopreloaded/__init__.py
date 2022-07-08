@@ -142,6 +142,7 @@ class EmergencyStopReloadedPlugin(
         self._logger.debug("getting state info")
         
         self.is_in_settings = True
+        self.gcode_sent     = False
         return flask.jsonify( printing=self.printing, gpio_mode_disabled=self.gpio_mode_disabled )
 
     # simpleApiPlugin
