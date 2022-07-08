@@ -4,7 +4,7 @@ $( function() {
 		
 		var self = this;
 		
-		self.validPinsBoard				= [ 3, 5, 7, 11, 13, 15, 19, 21, 23, 27, 29, 31, 33, 35, 37, 8, 10, 12, 16, 18, 22, 24, 26, 28, 32, 36, 38, 40 ];
+		self.invalidPhysicalPins				= [ 1, 2, 4, 6, 9, 14, 17, 20, 25, 27, 28, 30, 34, 39 ];
 		
 		self.settingsViewModel			= parameters[ 0 ];
 		
@@ -150,83 +150,70 @@ $( function() {
 
 		self.checkWarningPullUp = function( event ) {
 			
-            // Which mode are we using:
-			let	mode			= parseInt( self.getSetting( "gpioMode" ).val(), 10 ),
+            	// Which mode are we using:
+			let	mode				= parseInt( self.getSetting( "gpioMode" ).val(), 10 ),
 			
-            // What pin is the sensor connected to:
-				pin				= parseInt( self.getSetting( "pinInput" ).val(), 10 ),
+				// Pin input element:
+				pinInput			= self.getSetting( "pinInput" ),
 			
-            // What is the sensor connected to - ground or 3.3v:
-				sensorWiring	= parseInt( self.getSetting( "powerInput" ).val(), 10 );
-
-            // Show alerts
-			if (
+            	// What pin is the sensor connected to:
+				pin					= parseInt( pinInput.val(), 10 ),
 			
-				sensorWiring == 1 && ( // 1 = 3.3v
+            	// What is the sensor connected to - ground ( 0 ) or 3.3v ( 1 ):
+				sensorWiring		= parseInt( self.getSetting( "powerInput" ).val(), 10 ),
 				
-					( mode == 10 && ( pin == 3 || pin == 5 ) )
+				// some pins have physical pull up resistors which disallow wiring to 3.3v:
+				pullUpPins			= ( {
 					
-                    ||
+					10: [ 3, 5 ], // Physical mode
+					11: [ 2, 3 ], // BCM mode
 					
-                    ( mode == 11 && ( pin == 2 || pin == 3 ) )
-					
-				)
+				} )[ mode ],
 				
-			) {
+				max					= ( { 10: 40, 11: 27 } )[ mode ],
 				
-				self.getSetting( "pullupwarn" )
+				pullUpWarning		= self.getSetting( "pullupwarn" ),
+				badPinWarning		= self.getSetting( "badpin" );
+			
+			// Set max attr to right board type:
+			pinInput.attr( "max", max );
+				
+            // Toggle pull up warning:
+			if ( sensorWiring == 1 && pullUpPins.includes( pin ) ) {
+				
+				pullUpWarning
 				.removeClass( "hidden pulsAlert" )
 				.addClass( "pulsAlert" );
 				
 			} else {
 				
-				self.getSetting( "pullupwarn" )
+				pullUpWarning
 				.addClass( "hidden" )
 				.removeClass( "pulsAlert" );
 				
 			}
-
-            // Set max to right board type - 10 = Boardmode
-			let showWarning = true;
-			if ( mode == 10 ) {
+			
+			if ( // show badPinWarning if...
 				
-				self.getSetting( "pinInput" ).attr( "max", 40 );
+				( mode == 10 && self.invalidPhysicalPins.includes( pin ) ) || // pin is ground or voltage pin
 				
-				if ( pin != 0 && $.inArray( pin, self.validPinsBoard ) == -1 ) {
-					
-					showWarning = false;
-					
-					self.getSetting( "badpin" )
-					.removeClass( "hidden pulsAlert" )
-					.addClass( "pulsAlert" );
-					
-				} else {
-					
-					self.getSetting( "badpin" )
-					.addClass( "hidden" )
-					.removeClass( "pulsAlert" );
-					
-				}
+				( mode == 11 && pin == 1 ) || // pin is GPIO 1 which is reserved for I2C HAT communication
 				
-			} else self.getSetting( "pinInput" ).attr( "max", 27 );
-
-            // High or low
-			if ( self.getSetting( "pinInput" ).attr( "max" ) < pin || pin < 0 ) {
+				// is out of range:
+				pin > pinInput.attr( "max" ) ||
+				pin < 0
 				
-				self.getSetting( "badpin" )
+			) {
+				
+				badPinWarning
 				.removeClass( "hidden pulsAlert" )
 				.addClass( "pulsAlert" );
-				
+			
 			} else {
-				
-                // If the warning is not already shown then show it now:
-				if ( showWarning ) {
 					
-					self.getSetting( "badpin" )
-					.addClass( "hidden" )
-					.removeClass( "pulsAlert" );
-					
-				}
+				badPinWarning
+				.addClass( "hidden" )
+				.removeClass( "pulsAlert" );
 				
 			}
 		
