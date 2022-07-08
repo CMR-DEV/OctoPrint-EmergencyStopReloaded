@@ -1,7 +1,7 @@
 <h3>{{ _('Emergency Stop Reloaded') }}</h3>
 <form id="emergencystopreloaded_settings" class="form-horizontal">
     <div class="alert alert-info" data-bind="visible: printing">
-        <i class="fas icon-lock fa-hourglass-half  iconRight"></i>
+        <i class="fas icon-lock fa-hourglass-half iconRight"></i>
         {{ _('All settings are disabled while printing') }}
     </div>
 
@@ -28,7 +28,7 @@
             <span class="help-block">Which Raspberry Pi pin is your button output attached to? (0 disables the plugin) <a target="_blank" href="https://pinout.xyz/">Pinout help</a></span>
             <div class="alert alert-error hidden" id="emergencystopreloaded_settings_badpin">
                 <i class="fas fa-info icon-info-sign iconRight"></i>
-                {{ _('Warning: The selected pin is not a standard "data" pin.') }}
+                {{ _('Warning: The selected pin is not a suitable GPIO ( Ground, voltage, reserved or invalid ).') }}
             </div>
         </div>
     </div>
@@ -44,12 +44,12 @@
 			
 			<div class="alert alert-warn hidden" id="emergencystopreloaded_settings_pullupwarn">
 				<i class="fas fa-info icon-info-sign iconRight"></i>
-				Warning! Pins 3 and 5 (Board mode) or pins 2 and 3 (BCM mode) have a physical pull up resistor. If the button is connected to 3.3V this plugin won't work.
+				Warning: Pins 3 and 5 (Board mode) or pins 2 and 3 (BCM mode) have a physical pull up resistor. If the button is connected to 3.3V this plugin won't work.
 			</div>
 			
             <div class="alert alert-error">
                 <i class="fas fa-exclamation icon-warning-sign iconRight"></i>
-                Warning! Never connect the sensor to 5V! 5V could destroy GPIO of your Raspberry Pi.
+                Warning: Never connect the sensor to 5V! That could destroy your Raspberry Pi's GPIO.
             </div>
         </div>
     </div>
@@ -87,7 +87,7 @@
 		<div>
 			<small>
 				<a href="#" class="muted" onclick="$(this).children().toggleClass('fa-caret-right fa-caret-down').parent().parent().parent().next().slideToggle('fast')">
-					<i class="fa fa-caret-right"></i>{{ _('Advanced options') }}</a>
+					<i class="fa fa-caret-right"></i> {{ _('Advanced options') }}</a>
 			</small>
 		</div>
 		
@@ -97,7 +97,7 @@
 		
 			<div class="alert alert-warn" >
 				<i class="fas fa-info icon-info-sign iconRight"></i>
-				Warning! Increasing those values may lead to longer response times when actuating the switch.
+				Warning! Increasing the following values may lead to longer response times when actuating the switch.
 			</div>
 			
 			<div class="control-group">
