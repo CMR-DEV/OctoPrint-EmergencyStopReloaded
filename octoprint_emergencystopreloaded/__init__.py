@@ -128,13 +128,13 @@ class EmergencyStopReloadedPlugin(
         return {
             "gpio_mode":            GPIO_MODE.BOARD.value,
             "pin":                  0,
-            "power":                0,
+            "power":                GPIO_WIRING.GND.value,
             "g_code":               "M112",
-            "triggered ":           0,
+            "triggered ":           TRIGGER_TYPE.ON_CLOSE.value,
 
             "bounce_time":          250,
-            "reading_iterations":   5,
-            "reading_delay":        100,
+            "reading_iterations":   4,
+            "reading_delay":        125,
         }
 
     @plugin.BlueprintPlugin.route( "/state", methods=[ "GET" ] )
