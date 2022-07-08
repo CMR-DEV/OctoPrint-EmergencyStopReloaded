@@ -139,7 +139,7 @@ class EmergencyStopReloadedPlugin(
 
     @plugin.BlueprintPlugin.route( "/state", methods=[ "GET" ] )
     def on_api_get_state( self ):
-        self._logger.debug("Getting state info and disabling sensor temporarily")
+        self._logger.debug("Settings entered: Obtaining state and disabling sensor temporarily")
         
         self.is_in_settings = True
         self.gcode_sent     = False
@@ -157,7 +157,7 @@ class EmergencyStopReloadedPlugin(
             self.is_in_settings = False
             
             if self.plugin_enabled( self.setting_pin ):
-                self._logger.info( "Reading sensor due to settings exit" )
+                self._logger.debug( "Settings exited: Reading sensor" )
                 self.sensor_callback()
                 
             return "OK", 200
