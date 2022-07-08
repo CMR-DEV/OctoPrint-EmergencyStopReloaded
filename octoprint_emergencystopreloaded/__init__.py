@@ -153,9 +153,13 @@ class EmergencyStopReloadedPlugin(
     def on_api_command( self, command, data ):
         
         if command == "exitSettings":
+            
             self.is_in_settings = False
-            self._logger.info( "Reading sensor due to settings exit" )
-            self.sensor_callback()
+            
+            if self.plugin_enabled( self.setting_pin ):
+                self._logger.info( "Reading sensor due to settings exit" )
+                self.sensor_callback()
+                
             return "OK", 200
         
         try:
