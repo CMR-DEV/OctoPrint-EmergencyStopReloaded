@@ -292,58 +292,18 @@ class EmergencyStopReloadedPlugin(
             # attach event listener ( = self.sensor_callback ) when method is not called for testing:
             if not test:
                 try:
-                    
-                    if power == GPIO_WIRING.GND:
 
-                        self.pull_resistor( pin, power )
+                    self.pull_resistor( pin, power )
 
-                        # triggered when open
-                        if trigger_mode == TRIGGER_TYPE.ON_OPEN:
-                            self._logger.debug( "Reacting to rising edge" )
-                            GPIO.add_event_detect(
+                    self._logger.debug( "Reacting to changing edge" )
+                    GPIO.add_event_detect(
 
-                                pin,
-                                GPIO.RISING,
-                                callback=self.sensor_callback,
-                                bouncetime=self.setting_bounce_time
+                        pin,
+                        GPIO.BOTH,
+                        callback=self.sensor_callback,
+                        bouncetime=self.setting_bounce_time
 
-                            )
-
-                        # triggered when closed
-                        else:
-                            self._logger.debug( "Reacting to falling edge" )
-                            GPIO.add_event_detect(
-
-                                pin,
-                                GPIO.FALLING,
-                                callback=self.sensor_callback,
-                                bouncetime=self.setting_bounce_time
-
-                            )
-
-                    # 1 = sensor is powered, react to falling edge pulled down by pull down resistor
-                    else:
-
-                        self.pull_resistor( pin, power )
-
-                        # triggered when open
-                        if trigger_mode == TRIGGER_TYPE.ON_OPEN:
-                            self._logger.debug( "Reacting to falling edge" )
-                            GPIO.add_event_detect(
-
-                                pin,
-                                GPIO.FALLING,
-                                callback=self.sensor_callback,
-                                bouncetime=self.bounce_time
-
-                            )
-                        # triggered when closed
-                        else:
-                            self._logger.debug( "Reacting to rising edge" )
-                            GPIO.add_event_detect(
-                                pin, GPIO.RISING,
-                                callback=self.sensor_callback,
-                                bouncetime=self.bounce_time)
+                    )
 
                 except RuntimeError as e:
                     self._logger.warn( str( e ) )
