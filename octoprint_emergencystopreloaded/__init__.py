@@ -379,10 +379,12 @@ class EmergencyStopReloadedPlugin(
             "reading_delay",
         ]:
             if key in data:
-                value = data.get( key )
-
-                if not value.isdigit():
-
+                
+                try:
+                    value = int( data.get( key ) )
+                    
+                except ValueError:
+                    
                     self._plugin_manager.send_plugin_message(
                         self._identifier,
                         {
@@ -394,9 +396,7 @@ class EmergencyStopReloadedPlugin(
 
                     return
 
-                intVal = int( value )
-
-                if key is "reading_iterations" and intVal < 1:
+                if key is "reading_iterations" and value < 1:
 
                     self._plugin_manager.send_plugin_message(
                         self._identifier,
