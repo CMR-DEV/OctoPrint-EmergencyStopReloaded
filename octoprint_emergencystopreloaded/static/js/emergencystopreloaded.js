@@ -114,7 +114,7 @@ $( function() {
 							self.getSetting( "testResult" )
 							.addClass( "alert-success" );
 								
-							self.testSensorResult( "<i class=\"icon-stop\"></i> Sensor triggered! ( This whould send the G-code. )" );
+							self.testSensorResult( "<i class=\"fa fa-toggle-on\"></i> Sensor triggered! ( This whould send the G-code. )" );
 								
 							break;
 							
@@ -122,7 +122,7 @@ $( function() {
 							
 							self.getSetting( "testResult" )
 							.addClass( "alert-info" );
-							self.testSensorResult( "<i class=\"fas icon-ok fa-check\"></i> Sensor not triggered!" );
+							self.testSensorResult( "<i class=\"fa fa-toggle-off\"></i> Sensor not triggered!" );
 								
 							break;
 							
