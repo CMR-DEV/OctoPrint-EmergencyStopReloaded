@@ -26,16 +26,22 @@ class EmergencyStopReloadedPlugin(
     plugin.SettingsPlugin,
     plugin.SimpleApiPlugin,
     plugin.BlueprintPlugin,
-    plugin.AssetPlugin):
+    plugin.AssetPlugin
+):
 
-    # gpio mode set by 3rd party
+################################################################################
+
+    # FLAGS
+
+    # whether or not gpio mode has been set by 3rd party
     gpio_mode_disabled  = False
 
-    # gpio mode set by this plugin
-    gpio_mode_set = False
+    # whether or not gpio mode has been set by this plugin
+    gpio_mode_set       = False
+
 
     # whether or not there is a sensor test running currently
-    testing            = False
+    testing             = False
 
     # whether or not the printer is currently printing
     printing            = False
@@ -43,10 +49,17 @@ class EmergencyStopReloadedPlugin(
     # whether or not the gcode has already been sent
     gcode_sent          = False
 
+    # whether or not self.on_after_startup has been called already
     initialized         = False
+
+################################################################################
 
     def initialize( self ):
         GPIO.setwarnings( False )
+
+################################################################################
+
+    # PROPERTIES
 
     @property
     def setting_gpio_mode( self ):
@@ -79,6 +92,10 @@ class EmergencyStopReloadedPlugin(
     @property
     def setting_reading_delay( self ):
         return int( self._settings.get( ["reading_delay"] ) )
+
+################################################################################
+
+    # FUNCTION OVERLOADING
 
     # AssetPlugin hook
     def get_assets( self ):
