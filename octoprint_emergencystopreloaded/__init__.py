@@ -139,7 +139,7 @@ class EmergencyStopReloadedPlugin(
 
     @plugin.BlueprintPlugin.route( "/state", methods=[ "GET" ] )
     def on_api_get_state( self ):
-        self._logger.debug("getting state info")
+        self._logger.debug("Getting state info and disabling sensor temporarily")
         
         self.is_in_settings = True
         self.gcode_sent     = False
