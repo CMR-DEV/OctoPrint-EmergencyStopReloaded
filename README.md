@@ -1,6 +1,6 @@
 # OctoPrint Emergency Stop Reloaded
 
-This plugin reacts to a physical short lever microswitch output like [this](https://www.amazon.com/MXRS-SPDT1NO-Momentary-Roller-Switch/dp/B07MW3W79B)
+This plugin reacts to a physical short lever micro switch output like [this](https://www.amazon.com/MXRS-SPDT1NO-Momentary-Roller-Switch/dp/B07MW3W79B)
 If actuated it issues the configured G-code command(s) to the printer.
 
 Feature list:
