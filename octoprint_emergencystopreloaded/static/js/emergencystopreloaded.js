@@ -219,7 +219,7 @@ $( function() {
 		
 		};
 
-		self.getDisabled = function( item ) {
+		self.fetchState = function( item ) {
 			
 			$.ajax( {
 				
@@ -240,8 +240,7 @@ $( function() {
 		self.onSettingsShown = function() {
 			
 			self.testSensorResult( "" );
-			
-			self.getDisabled();
+			self.fetchState();
 			
             // Check for broken settings:
 			self.getSetting( [ "gpioMode", "pinInput", "powerInput" ] )
