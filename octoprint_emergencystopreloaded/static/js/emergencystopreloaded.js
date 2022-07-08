@@ -251,6 +251,21 @@ $( function() {
 			.trigger( "change.fsensor" );
 			
 		};
+		
+		self.onSettingsHidden = function() {
+			
+			$.ajax( {
+				url:         "/api/plugin/emergencystopreloaded",
+				type:        "post",
+				dataType:    "json",
+				contentType: "application/json",
+				headers:     { "X-Api-Key": UI_API_KEY },
+					
+				data: JSON.stringify( { command: "exitSettings" } ),
+						
+			} )
+			
+		};
 	
 	}
 
